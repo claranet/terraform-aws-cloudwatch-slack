@@ -1,11 +1,13 @@
-# tf-aws-cloudwatch-slack
+tf-aws-cloudwatch-slack
+-----
 
 Sends CloudWatch Alarm events to Slack.
 
-## Usage
+Usage
+-----
 
-```json
-# Create an SNS topic and send its events to the Luigi Slack channel.
+```js
+// Create an SNS topic and send its events to the Luigi Slack channel.
 
 resource "aws_sns_topic" "luigi_slack" {
   name = "luigi-slack-notifications"
@@ -23,7 +25,7 @@ module "cloudwatch_luigi_slack" {
   }
 }
 
-# Create an SNS topic and send its events to the Customer's Slack channel.
+// Create an SNS topic and send its events to the Customer’s Slack channel.
 
 resource "aws_sns_topic" "customer_slack" {
   name = "customer-slack-notifications"
@@ -41,7 +43,7 @@ module "cloudwatch_customer_slack" {
   }
 }
 
-# Create CloudWatch Alarms and point them to the relevant SNS topics.
+// Create CloudWatch Alarms and point them to the relevant SNS topics.
 
 resource "aws_cloudwatch_metric_alarm" "database_backup" {
   alarm_name        = "${var.envname}-database-backup"
@@ -69,10 +71,41 @@ resource "aws_cloudwatch_metric_alarm" "database_backup" {
 resource "aws_cloudwatch_metric_alarm" "other_alarm" {
   ...
 
-  # Point to the Customer's SNS topic
+  # Point to the Customer’s SNS topic
   alarm_actions = ["${aws_sns_topic.customer_slack.arn}"]
   ok_actions    = ["${aws_sns_topic.customer_slack.arn}"]
 
   ...
 }
 ```
+
+Variables
+---------
+_Variables marked with **[*]** are mandatory._
+
+###### General variables
+ - `name` - The name for resources created by this module. **[*]**
+ - `sns_topic_arn` - The AWS ARN for the SNS topic to subscribe to. **[*]**
+ - `slack_url` - The Slack webhook URL to send messages to. **[*]**
+ - `tags` - List of tags to add to the Lambda function this module uses to send slack messages. [Default: `{}`]
+
+###### OK state variables
+ - `ok_user_name` - The username to use when sending `OK` type messages. [Default: _blank_]
+ - `ok_user_emoji` - The icon for the user when sending `OK` type messages. [Default: _blank_]
+ - `ok_status_emoji` - The emoji to use for `OK` type messages. [Default: `:white_check_mark:`]
+ 
+###### ALARM state variables
+ - `alarm_user_name` - The username to use when sending `ALARM` type messages. [Default: _blank_]
+ - `alarm_user_emoji` - The icon for the user when sending `ALARM` type messages. [Default: _blank_]
+ - `alarm_status_emoji` - The emoji to use for `ALARM` type messages. [Default: `:x:`]
+ 
+###### INSUFFICIENT_DATA state variables
+ - `insufficient_data_user_name` - The username to use when sending `INSUFFICIENT_DATA` type messages. [Default: _blank_]
+ - `insufficient_data_user_emoji` - The icon for the user when sending `INSUFFICIENT_DATA` type messages. [Default: _blank_]
+ - `insufficient_data_status_emoji` - The emoji to use for `INSUFFICIENT_DATA` type messages. [Default: `:x:`]
+
+<br />
+
+Outputs
+-------
+_None_
