@@ -79,6 +79,12 @@ resource "aws_cloudwatch_metric_alarm" "other_alarm" {
 }
 ```
 
+Dependencies
+------------
+
+* [tf-aws-lambda](https://git.bashton.net/Bashton-Terraform-Modules/tf-aws-lambda)
+  * tested against v0.4.1
+
 Variables
 ---------
 _Variables marked with **[*]** are mandatory._
