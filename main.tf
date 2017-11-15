@@ -13,6 +13,9 @@ module "lambda" {
 
   source_path = "${path.module}/lambda.py"
 
+  attach_policy = true
+  policy        = "${data.aws_iam_policy_document.lambda.json}"
+
   environment {
     variables = {
       SLACK_URL = "${var.slack_url}"
@@ -29,6 +32,20 @@ module "lambda" {
       INSUFFICIENT_DATA_USER_EMOJI   = "${var.insufficient_data_user_emoji}"
       INSUFFICIENT_DATA_STATUS_EMOJI = "${var.insufficient_data_status_emoji}"
     }
+  }
+}
+
+data "aws_iam_policy_document" "lambda" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "cloudwatch:DescribeAlarmHistory",
+    ]
+
+    resources = [
+      "*",
+    ]
   }
 }
 

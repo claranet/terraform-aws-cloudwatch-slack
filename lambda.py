@@ -4,6 +4,7 @@ Sends a message to a Slack Webhook URL with information about the event.
 
 """
 
+import boto3
 import json
 import logging
 import os
@@ -11,6 +12,8 @@ import os
 from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
 
+
+cloudwatch = boto3.client('cloudwatch')
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -36,12 +39,44 @@ STATES = {
 }
 
 
+def is_first_state_update(alarm_name):
+    """
+    Checks if this is the very first state update for the alarm. CloudWatch
+    creates alarms in the INSUFFICIENT_DATA state. They usually immediately
+    change to another state (OK or FAILED) according to the metrics.
+
+    """
+
+    # Check the alarm history for state updates.
+    response = cloudwatch.describe_alarm_history(
+        AlarmName=alarm_name,
+        HistoryItemType='StateUpdate',
+        MaxRecords=2,
+    )
+    if response['ResponseMetadata']['HTTPStatusCode'] != 200:
+        # Log errors rather than raising exceptions, in the hope that it can
+        # still notify the Slack channel about the alarm.
+        logger.error('Could not check alarm history: %s', response)
+        return False
+    else:
+        # If only 1 state update was found, then this was the first one.
+        state_update_count = len(response['AlarmHistoryItems'])
+        return state_update_count == 1
+
+
 def lambda_handler(event, context):
     logger.info('Event: ' + str(event))
 
     data = json.loads(event['Records'][0]['Sns']['Message'])
 
     state_value = data['NewStateValue']
+
+    if state_value == 'OK':
+        if data['OldStateValue'] == 'INSUFFICIENT_DATA':
+            if is_first_state_update(data['AlarmName']):
+                logger.info('Ignoring initial OK alarm state')
+                return
+
     description = data['AlarmDescription']
 
     state = STATES[state_value]
