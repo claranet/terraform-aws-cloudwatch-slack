@@ -1,7 +1,8 @@
 # Create the Lambda function.
 
 module "lambda" {
-  source = "../tf-aws-lambda"
+  source  = "claranet/lambda/aws"
+  version = "0.9.1"
 
   function_name = "${var.name}"
   description   = "Sends CloudWatch Alarm events to Slack"
