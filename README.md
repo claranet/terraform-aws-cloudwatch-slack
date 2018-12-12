@@ -12,7 +12,7 @@ resource "aws_sns_topic" "luigi_slack" {
 }
 
 module "cloudwatch_luigi_slack" {
-  source = "../modules/tf-aws-cloudwatch-slack"
+  source = "github.com/claranet/terraform-aws-cloudwatch-slack?ref=v1.3.3"
 
   name          = "luigi-slack-notifications"
   sns_topic_arn = "${aws_sns_topic.luigi_slack.arn}"
@@ -30,7 +30,7 @@ resource "aws_sns_topic" "customer_slack" {
 }
 
 module "cloudwatch_customer_slack" {
-  source = "../modules/tf-aws-cloudwatch-slack"
+  source = "github.com/claranet/terraform-aws-cloudwatch-slack?ref=v1.3.3"
 
   name          = "customer-slack-notifications"
   sns_topic_arn = "${aws_sns_topic.customer_slack.arn}"
