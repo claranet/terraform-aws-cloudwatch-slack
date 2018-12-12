@@ -1,6 +1,6 @@
-# tf-aws-cloudwatch-slack
+# terraform-aws-cloudwatch-slack
 
-Sends CloudWatch Alarm events to Slack.
+Terraform module that sends CloudWatch Alarm events to Slack.
 
 ## Usage
 
