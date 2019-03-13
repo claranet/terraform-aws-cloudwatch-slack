@@ -47,7 +47,7 @@ def is_first_state_update(alarm_name):
 
     """
 
-    # Check the alarm history for state updates.
+    # Check the alarm history for 2 state updates.
     response = cloudwatch.describe_alarm_history(
         AlarmName=alarm_name,
         HistoryItemType='StateUpdate',
@@ -59,9 +59,9 @@ def is_first_state_update(alarm_name):
         logger.error('Could not check alarm history: %s', response)
         return False
     else:
-        # If only 1 state update was found, then this was the first one.
+        # If 2 state updates weren't returned, then this was the first one.
         state_update_count = len(response['AlarmHistoryItems'])
-        return state_update_count == 1
+        return state_update_count != 2
 
 
 def lambda_handler(event, context):
