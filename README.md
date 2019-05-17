@@ -81,16 +81,17 @@ resource "aws_cloudwatch_metric_alarm" "other_alarm" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| alarm\_status\_emoji | - | string | `:x:` | no |
-| alarm\_user\_emoji | - | string | `` | no |
-| alarm\_user\_name | - | string | `` | no |
-| insufficient\_data\_status\_emoji | - | string | `:x:` | no |
-| insufficient\_data\_user\_emoji | - | string | `` | no |
-| insufficient\_data\_user\_name | - | string | `` | no |
-| name | The name to use for created resources | string | - | yes |
-| ok\_status\_emoji | - | string | `:white_check_mark:` | no |
-| ok\_user\_emoji | - | string | `` | no |
-| ok\_user\_name | - | string | `` | no |
-| slack\_url | The Slack webhook URL | string | - | yes |
-| sns\_topic\_arn | The SNS topic to subscribe to | string | - | yes |
-| tags | - | map | `<map>` | no |
+| alarm\_status\_emoji |  | string | `":x:"` | no |
+| alarm\_user\_emoji |  | string | `""` | no |
+| alarm\_user\_name |  | string | `""` | no |
+| insufficient\_data\_status\_emoji |  | string | `":x:"` | no |
+| insufficient\_data\_user\_emoji |  | string | `""` | no |
+| insufficient\_data\_user\_name |  | string | `""` | no |
+| lambda\_layers |  | list | `<list>` | no |
+| name | The name to use for created resources | string | n/a | yes |
+| ok\_status\_emoji |  | string | `":white_check_mark:"` | no |
+| ok\_user\_emoji |  | string | `""` | no |
+| ok\_user\_name |  | string | `""` | no |
+| slack\_url | The Slack webhook URL | string | n/a | yes |
+| sns\_topic\_arn | The SNS topic to subscribe to | string | n/a | yes |
+| tags |  | map | `<map>` | no |

@@ -58,3 +58,10 @@ variable "insufficient_data_user_emoji" {
 variable "insufficient_data_status_emoji" {
   default = ":x:"
 }
+
+# Lambda layers, for testing the new Lambda execution environment:
+# https://aws.amazon.com/blogs/compute/upcoming-updates-to-the-aws-lambda-execution-environment/ 
+
+variable "lambda_layers" {
+  default = []
+}
