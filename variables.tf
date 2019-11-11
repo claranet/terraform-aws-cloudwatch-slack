@@ -1,16 +1,16 @@
 variable "name" {
   description = "The name to use for created resources"
-  type        = "string"
+  type        = string
 }
 
 variable "sns_topic_arn" {
   description = "The SNS topic to subscribe to"
-  type        = "string"
+  type        = string
 }
 
 variable "slack_url" {
   description = "The Slack webhook URL"
-  type        = "string"
+  type        = string
 }
 
 variable "tags" {
