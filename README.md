@@ -2,6 +2,13 @@
 
 Terraform module that sends CloudWatch Alarm events to Slack.
 
+## Terraform version compatibility
+
+| Module version | Terraform version |
+|----------------|-------------------|
+| 2.x.x          | 0.12.x            |
+| <= 1.x.x       | 0.11.x            |
+
 ## Usage
 
 ```js
@@ -12,14 +19,14 @@ resource "aws_sns_topic" "luigi_slack" {
 }
 
 module "cloudwatch_luigi_slack" {
-  source = "github.com/claranet/terraform-aws-cloudwatch-slack?ref=v1.3.3"
+  source = "github.com/claranet/terraform-aws-cloudwatch-slack?ref=v2.0.0"
 
   name          = "luigi-slack-notifications"
-  sns_topic_arn = "${aws_sns_topic.luigi_slack.arn}"
-  slack_url     = "${var.luigi_slack_webhook_url}"
+  sns_topic_arn = aws_sns_topic.luigi_slack.arn
+  slack_url     = var.luigi_slack_webhook_url
 
   tags = {
-    Environment = "${var.envname}"
+    Environment = var.envname
   }
 }
 
@@ -33,11 +40,11 @@ module "cloudwatch_customer_slack" {
   source = "github.com/claranet/terraform-aws-cloudwatch-slack?ref=v1.3.3"
 
   name          = "customer-slack-notifications"
-  sns_topic_arn = "${aws_sns_topic.customer_slack.arn}"
-  slack_url     = "${var.customer_slack_webhook_url}"
+  sns_topic_arn = aws_sns_topic.customer_slack.arn
+  slack_url     = var.customer_slack_webhook_url
 
   tags = {
-    Environment = "${var.envname}"
+    Environment = var.envname
   }
 }
 
@@ -51,7 +58,7 @@ resource "aws_cloudwatch_metric_alarm" "database_backup" {
   namespace   = "BashtonBilling"
 
   dimensions {
-    Environment = "${var.envname}"
+    Environment = var.envname
   }
 
   statistic           = "Average"
@@ -62,16 +69,16 @@ resource "aws_cloudwatch_metric_alarm" "database_backup" {
   treat_missing_data  = "missing"
 
   // Point to the Luigi SNS topic
-  insufficient_data_actions = ["${aws_sns_topic.luigi_slack.arn}"]
-  ok_actions                = ["${aws_sns_topic.luigi_slack.arn}"]
+  insufficient_data_actions = [aws_sns_topic.luigi_slack.arn]
+  ok_actions                = [aws_sns_topic.luigi_slack.arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "other_alarm" {
   ...
 
   // Point to the Customer's SNS topic
-  alarm_actions = ["${aws_sns_topic.customer_slack.arn}"]
-  ok_actions    = ["${aws_sns_topic.customer_slack.arn}"]
+  alarm_actions = [aws_sns_topic.customer_slack.arn]
+  ok_actions    = [aws_sns_topic.customer_slack.arn]
 
   ...
 }
