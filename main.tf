@@ -30,6 +30,8 @@ module "lambda" {
       INSUFFICIENT_DATA_USER_NAME    = var.insufficient_data_user_name
       INSUFFICIENT_DATA_USER_EMOJI   = var.insufficient_data_user_emoji
       INSUFFICIENT_DATA_STATUS_EMOJI = var.insufficient_data_status_emoji
+      ACCOUNT_APPEND                 = var.account_append
+      ACCOUNT_NAME                   = var.account_name
     }
   }
 }

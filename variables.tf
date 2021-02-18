@@ -59,8 +59,22 @@ variable "insufficient_data_status_emoji" {
   default = ":x:"
 }
 
+# Options for displaying account details:
+
+variable "account_append" {
+  description = "Whether to append the account details to the message."
+  type        = bool
+  default     = false
+}
+
+variable "account_name" {
+  description = "Optional display name for the account if appending."
+  type        = string
+  default     = ""
+}
+
 # Lambda layers, for testing the new Lambda execution environment:
-# https://aws.amazon.com/blogs/compute/upcoming-updates-to-the-aws-lambda-execution-environment/ 
+# https://aws.amazon.com/blogs/compute/upcoming-updates-to-the-aws-lambda-execution-environment/
 
 variable "lambda_layers" {
   default = []
