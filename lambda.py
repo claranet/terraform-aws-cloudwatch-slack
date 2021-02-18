@@ -15,6 +15,9 @@ from urllib.error import URLError, HTTPError
 
 cloudwatch = boto3.client('cloudwatch')
 
+if os.environ['ACCOUNT_APPEND'].lower() == 'true':
+  account_id = boto3.client('sts').get_caller_identity()['Account']
+
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
@@ -81,14 +84,33 @@ def lambda_handler(event, context):
 
     state = STATES[state_value]
 
+    attachments = [{
+        'text': '{status_emoji}  {state}'.format(
+            status_emoji=state['status_emoji'],
+            state=state_value,
+        )
+    }]
+
+    if os.environ['ACCOUNT_APPEND'].lower() == 'true':
+        if os.environ['ACCOUNT_NAME'] != '':
+            account_string = '{name} ({id})'.format(
+                name=os.environ['ACCOUNT_NAME'],
+                id=account_id,
+            )
+        else:
+            account_string = '{id}'.format(
+                id=account_id,
+            )
+
+        attachments.append({
+            'text': 'Account: {account_string}'.format(
+                account_string=account_string,
+            )
+        })
+
     data = {
         'text': description,
-        'attachments': [{
-            'text': '{status_emoji}  {state}'.format(
-                status_emoji=state['status_emoji'],
-                state=state_value,
-            )
-        }],
+        'attachments': attachments,
     }
 
     if state['username']:

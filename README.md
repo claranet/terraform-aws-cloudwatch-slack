@@ -102,3 +102,5 @@ resource "aws_cloudwatch_metric_alarm" "other_alarm" {
 | slack\_url | The Slack webhook URL | string | n/a | yes |
 | sns\_topic\_arn | The SNS topic to subscribe to | string | n/a | yes |
 | tags |  | map | `<map>` | no |
+| account_append | Whether to append the account details to the message | bool | false | no
+| account_name | Optional display name for the account if appending | string | `""` | no
