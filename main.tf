@@ -6,7 +6,7 @@ module "lambda" {
   function_name = var.name
   description   = "Sends CloudWatch Alarm events to Slack"
   handler       = "lambda.lambda_handler"
-  runtime       = "python3.6"
+  runtime       = "python3.9"
   layers        = var.lambda_layers
   timeout       = 10
 
