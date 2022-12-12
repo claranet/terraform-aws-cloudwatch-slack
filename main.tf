@@ -1,7 +1,7 @@
 # Create the Lambda function.
 
 module "lambda" {
-  source = "github.com/claranet/terraform-aws-lambda?ref=v1.1.0"
+  source = "github.com/claranet/terraform-aws-lambda?ref=james-remove-depreciated-function"
 
   function_name = var.name
   description   = "Sends CloudWatch Alarm events to Slack"
